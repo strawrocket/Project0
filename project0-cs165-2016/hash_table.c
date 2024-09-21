@@ -106,38 +106,9 @@ int erase(hashtable *ht, keyType key) {
     printf("Hash table or table is NULL\n");
     return -1;
   }
+  // redo function on your own.
 
-  int idx = key % ht->sz;
-  printf("TEST 1");
-  node *p = ht->table[idx];
-  node *prev = NULL;
-  int found = 0;
-  printf("pointer == %p", p);
-  while (p) {
-    if (p->key == key) {
-      found = 1;
-      if (prev) {
-        prev->next = p->next;
-      } else {
-        ht->table[idx] = p->next;
-      }
-
-      node *tmp = p->next;
-
-      free(p);
-      p = tmp;
-
-      if (ht->n_ele > 0) {
-        ht->n_ele--;
-      }
-
-    } else {
-      prev = p;
-      p = p->next;
-    }
-  }
-
-  return found ? 0 : -1;
+  return 0;
 }
 // This method frees all memory occupied by the hash table.
 // It returns an error code, 0 for success and -1 otherwise.
