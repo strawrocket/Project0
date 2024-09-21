@@ -10,7 +10,6 @@ int main(void) {
   hashtable *ht = NULL;
   int size = 10;
   allocate(&ht, size);
-  printf("%d", allocate(&ht, size));
   int key = 99;
   int value = 569;
 
@@ -32,10 +31,16 @@ int main(void) {
     printf("value at %d, key = %d and value = %d \n", i, key, values[i]);
   }
 
-  erase(ht, 0);
-
+  erase(ht, 99);
   get(ht, key, values, num_values, &num_results);
-  printf("%d", num_results);
+  if ((num_results) > num_values) {
+    values = realloc(values, (num_results) * sizeof(valType));
+    get(ht, 0, values, num_values, &num_results);
+  }
+
+  for (int i = 0; i < (num_results); i++) {
+    printf("value at %d, key = %d and value = %d \n", i, key, values[i]);
+  }
 
   free(values);
   deallocate(ht);
