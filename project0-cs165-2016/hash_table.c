@@ -1,5 +1,4 @@
 #include "hash_table.h"
-#include <cstddef>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -107,9 +106,24 @@ int erase(hashtable *ht, keyType key) {
     printf("Hash table or table is NULL\n");
     return -1;
   }
-
+  int idx = key % ht->sz;
   node *p = ht->table[idx];
-  node *prev = NULL
+  node *prev = NULL;
+  while (p) {
+    if (p->key == key) {
+      if (prev) {
+        prev->next = p->next;
+      } else {
+        ht->table[idx] = p->next;
+      }
+      node *tmp = p;
+      free(p);
+    } else {
+      prev->next = p;
+      p = p->next;
+    }
+  }
+  return 0;
 }
 // This method frees all memory occupied by the hash table.
 // It returns an error code, 0 for success and -1 otherwise.
