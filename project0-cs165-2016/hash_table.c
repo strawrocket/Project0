@@ -116,10 +116,11 @@ int erase(hashtable *ht, keyType key) {
       } else {
         ht->table[idx] = p->next;
       }
-      node *tmp = p;
+      node *tmp = p->next;
       free(p);
+      p = tmp;
     } else {
-      prev->next = p;
+      prev = p;
       p = p->next;
     }
   }
