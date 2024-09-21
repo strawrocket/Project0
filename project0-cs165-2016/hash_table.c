@@ -53,16 +53,12 @@ int put(hashtable *ht, keyType key, valType value) {
   new_node->next = NULL;
 
   if (!ht->table[idx]) {
+    new_node->next = 0;
     ht->table[idx] = new_node;
-  } else {
-    node *ptr = ht->table[idx];
-    while (ptr && ptr->next) {
-      ptr = ptr->next;
-    }
-    ptr->next = new_node;
   }
 
-  ht->n_ele++;
+  new_node->next = ht->table[idx];
+  ht->table[idx] = new_node;
 
   return 0;
 }
@@ -107,11 +103,42 @@ int get(hashtable *ht, keyType key, valType *values, int num_values,
 // It returns an error code, 0 for success and -1 otherwise (e.g., if the
 // hashtable is not allocated).
 int erase(hashtable *ht, keyType key) {
-  (void)ht;
-  (void)key;
-  return 0;
-}
+  if (!ht || !ht->table) {
+    printf("Hash table or table is NULL\n");
+    return -1;
+  }
 
+  int idx = key % ht->sz;
+
+  node *p = ht->table[idx];
+  node *prev = NULL;
+  int found = 0;
+  while (p) {
+    if (p->key == key) {
+      found = 1;
+      if (prev) {
+        prev->next = p->next;
+      } else {
+        ht->table[idx] = p->next;
+      }
+
+      node *tmp = p->next;
+
+      free(p);
+      p = tmp;
+
+      if (ht->n_ele > 0) {
+        ht->n_ele--;
+      }
+
+    } else {
+      prev = p;
+      p = p->next;
+    }
+  }
+
+  return found ? 0 : -1;
+}
 // This method frees all memory occupied by the hash table.
 // It returns an error code, 0 for success and -1 otherwise.
 int deallocate(hashtable *ht) {

@@ -31,10 +31,13 @@ int main(void) {
   for (int i = 0; i < (num_results); i++) {
     printf("value at %d, key = %d and value = %d \n", i, key, values[i]);
   }
-  free(values);
 
   erase(ht, 0);
 
+  get(ht, key, values, num_values, &num_results);
+  printf("%d", num_results);
+
+  free(values);
   deallocate(ht);
   return 0;
 }
