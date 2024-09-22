@@ -2,13 +2,11 @@
                          // being included more than once.
 #define CS165_HASH_TABLE
 
-#define HASHSIZE 11;
-
 typedef struct node {
   // define the components of the hash table here (e.g. the array, bookkeeping
   // for number of elements, etc)
-  int key;
-  int value;
+  int key1, key2;
+  int value1, value2;
   struct node *next;
 } node;
 

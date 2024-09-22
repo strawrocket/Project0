@@ -40,24 +40,6 @@ int put(hashtable *ht, keyType key, valType value) {
 
   if (!ht || !ht->table)
     return -1;
-
-  node *new_node;
-  new_node = calloc(1, sizeof(node));
-  if (!new_node)
-    return -1;
-
-  int idx = key % ht->sz;
-
-  new_node->key = key;
-  new_node->value = value;
-
-  if (!ht->table[idx]) {
-    new_node->next = 0;
-    ht->table[idx] = new_node;
-  } else {
-    new_node->next = ht->table[idx];
-    ht->table[idx] = new_node;
-  }
   return 0;
 }
 
@@ -73,27 +55,6 @@ int put(hashtable *ht, keyType key, valType value) {
 // allocated).
 int get(hashtable *ht, keyType key, valType *values, int num_values,
         int *num_results) {
-
-  if (!ht || !ht->table)
-    return -1;
-
-  int idx = key % ht->sz;
-
-  node *ptr = ht->table[idx];
-  int cnt = 0;
-  while (ptr) {
-    if (cnt >= num_values)
-      break;
-
-    if (ptr->key == key)
-      values[cnt++] = ptr->value;
-
-    ptr = ptr->next;
-  }
-  if (num_results) {
-    *num_results = cnt;
-  }
-
   return 0;
 }
 
@@ -106,24 +67,6 @@ int erase(hashtable *ht, keyType key) {
     printf("Hash table or table is NULL\n");
     return -1;
   }
-  int idx = key % ht->sz;
-  node *p = ht->table[idx];
-  node *prev = NULL;
-  while (p) {
-    if (p->key == key) {
-      if (prev) {
-        prev->next = p->next;
-      } else {
-        ht->table[idx] = p->next;
-      }
-      node *tmp = p->next;
-      free(p);
-      p = tmp;
-    } else {
-      prev = p;
-      p = p->next;
-    }
-  }
   return 0;
 }
 // This method frees all memory occupied by the hash table.
@@ -132,6 +75,6 @@ int deallocate(hashtable *ht) {
   // This line tells the compiler that we know we haven't used the variable
   // yet so don't issue a warning. You should remove this line once you use
   // the parameter.
-  (void)ht;
+
   return 0;
 }
